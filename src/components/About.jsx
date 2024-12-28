@@ -20,10 +20,12 @@ const About = () => {
         })
 
         clipAnimation.to(".mask-clip-path", {
-            width: "100vw",
-            height: "100vh",
+            width: "100%",
+            height: "100%",
             borderRadius: 0,
-            
+            // onUpdate: () => {
+            //     ScrollTrigger.refresh()
+            // }
         })
     });
 

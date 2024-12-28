@@ -20,6 +20,9 @@ const Navbar = () => {
     // State to determine the visibility of the navbar
     const [isNavVisible, setisNavVisible] = useState(true);
 
+    // State to manage the visibility of the mobile menu
+    const [isMobileMenuVisible, setIsMobileMenuVisible] = useState(false);
+
     // Reference to the navbar container element
     const navContainerRef = useRef(null);
 
@@ -71,6 +74,16 @@ const Navbar = () => {
         }
     });
 
+    // Toggle mobile menu visibility
+    const toggleMobileMenu = () => {
+        setIsMobileMenuVisible((prev) => !prev);
+    };
+
+    // Close mobile menu when a nav link is clicked
+    const handleNavLinkClick = () => {
+        setIsMobileMenuVisible(false);
+    };
+
     return (
         <div
             ref={navContainerRef}
@@ -105,6 +118,44 @@ const Navbar = () => {
                             ))}
                         </div>
 
+                        {/* Hamburger menu button for small screens */}
+                        <button
+                            onClick={toggleMobileMenu}
+                            className="md:hidden flex flex-col justify-around w-6 h-6 bg-transparent border-none cursor-pointer p-0 z-10 focus:outline-none"
+                        >
+                            <span
+                                className={`block w-6 h-0.5 bg-violet-50 rounded transition-transform duration-300 ease-in-out ${
+                                    isMobileMenuVisible ? "transform rotate-45 translate-y-1.5" : ""
+                                }`}
+                            ></span>
+                            <span
+                                className={`block w-6 h-0.5 bg-violet-50 rounded transition-opacity duration-300 ease-in-out ${
+                                    isMobileMenuVisible ? "opacity-0" : ""
+                                }`}
+                            ></span>
+                            <span
+                                className={`block w-6 h-0.5 bg-violet-50 rounded transition-transform duration-300 ease-in-out ${
+                                    isMobileMenuVisible ? "transform -rotate-45 -translate-y-1.5" : ""
+                                }`}
+                            ></span>
+                        </button>
+
+                        {/* Mobile menu */}
+                        {isMobileMenuVisible && (
+                            <div className="absolute top-16 left-0 w-full bg-violet-50 shadow-md md:hidden">
+                                {navItems.map((item) => (
+                                    <a
+                                        key={item}
+                                        href={`#${item.toLowerCase()}`}
+                                        className="block p-4 border-b"
+                                        onClick={handleNavLinkClick}
+                                    >
+                                        {item}
+                                    </a>
+                                ))}
+                            </div>
+                        )}
+
                         {/* Audio toggle button with indicator animation */}
                         <button
                             onClick={toggleAudioIndicator}
@@ -133,4 +184,4 @@ const Navbar = () => {
     );
 };
 
-export default Navbar; 
+export default Navbar;
