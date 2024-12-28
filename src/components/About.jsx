@@ -15,14 +15,17 @@ const About = () => {
                 end: "+=800 center",
                 scrub: 0.5,
                 pin: true,
-                pinSpacing: true
-            }
+                pinSpacing: true,
+            },
         })
 
         clipAnimation.to(".mask-clip-path", {
-            width: "100vw",
-            height: "100vw",
-            borderRadius: 0
+            width: "100%",
+            height: "100%",
+            borderRadius: 0,
+            onUpdate: () => {
+                ScrollTrigger.refresh()
+            }
         })
     });
 
