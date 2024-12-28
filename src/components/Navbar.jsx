@@ -9,10 +9,10 @@ const navItems = ["Nexus", "Vault", "Prologue", "About", "Contact"];
 
 const Navbar = () => {
     // State to manage audio playing status
-    const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+    const [isAudioPlaying, setIsAudioPlaying] = useState(true);
 
     // State to manage the active state of the audio indicator
-    const [isIndicatorActive, setIsIndicatorActive] = useState(false);
+    const [isIndicatorActive, setIsIndicatorActive] = useState(true);
 
     // State to keep track of the last Y scroll position
     const [lastScrollY, setlastScrollY] = useState(0);
@@ -72,7 +72,24 @@ const Navbar = () => {
         } else {
             audioElementRef.current.pause(); // Pause audio
         }
-    });
+    }, [isAudioPlaying]);
+
+    // Pause audio when the tab is not visible and play when it becomes visible
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                audioElementRef.current.pause();
+            } else if (isAudioPlaying) {
+                audioElementRef.current.play();
+            }
+        };
+
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+        };
+    }, [isAudioPlaying]);
 
     // Toggle mobile menu visibility
     const toggleMobileMenu = () => {
@@ -142,7 +159,7 @@ const Navbar = () => {
 
                         {/* Mobile menu */}
                         {isMobileMenuVisible && (
-                            <div className="absolute top-16 left-0 w-full bg-violet-50 shadow-md md:hidden">
+                            <div className="absolute top-16 left-0 w-full bg-violet-50 shadow-md md:hidden rounded-md">
                                 {navItems.map((item) => (
                                     <a
                                         key={item}
@@ -165,6 +182,7 @@ const Navbar = () => {
                                 ref={audioElementRef}
                                 className="hidden"
                                 src="/audio/no_pain_no_gain.mp3"
+                                autoPlay
                                 loop
                             />
                             {[1, 2, 3, 4].map((bar) => (
